@@ -1,0 +1,10 @@
+1. .env --- done 
+2. config --- done 
+3. globalErrorHandler --- done (except default importing)
+4. student.validation -- done 
+5. student.interface -- done
+6. student.model -- done
+7. student.service -- done
+8.
+9.
+10. sendResponse -- done

@@ -41,18 +41,18 @@ export type TStudent = {
   isDeleted: boolean;
 };
 
-// for generic static
-// export interface StudentModel extends Model<TStudent> {
-//   isUserExists(id: string): Promise<TStudent | null>;
-// }
-
-// for instance method
-export interface StudentMethods {
+// for creating static
+export interface StudentModel extends Model<TStudent> {
   isUserExists(id: string): Promise<TStudent | null>;
 }
 
-export type StudentModel = Model<
-  TStudent,
-  Record<string, never>,
-  StudentMethods
->;
+// for creating instance method
+// export interface StudentMethods {
+//   isUserExists(id: string): Promise<TStudent | null>;
+// }
+
+// export type StudentModel = Model<
+//   TStudent,
+//   Record<string, never>,
+//   StudentMethods
+// >;
