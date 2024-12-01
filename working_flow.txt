@@ -5,6 +5,7 @@
 5. student.interface -- done
 6. student.model -- done
 7. student.service -- done
-8.
-9.
+8. student.controller -- done
+9. notFound -- 
 10. sendResponse -- done
+11. app.ts -- done 
