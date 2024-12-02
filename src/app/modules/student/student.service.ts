@@ -6,13 +6,14 @@ const getAllStudentsFromDB = async () => {
 };
 
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await Student.aggregate([{ $match: { id } }]);
-  // const result = await Student.findById(id);
+  // const result = await Student.aggregate([{ $match: { id } }]);
+  const result = await Student.findById(id);
   return result;
 };
 
-const deleteStudentFromDB = async (id: string) => {
-  const result = await Student.updateOne({ id }, { isDeleted: true });
+const deleteStudentFromDB = async (studentId: string, updateData: object) => {
+  // const result = await Student.updateOne({ studentId }, { isDeleted: true });
+  const result = await Student.findByIdAndUpdate(studentId, updateData, { new: true });
   return result;
 };
 
