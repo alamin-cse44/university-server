@@ -1,11 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
+import { RequestHandler } from 'express';
 import { UserServices } from './user.service';
+import sendResponse from '../../utils/sendResponse';
+import { StatusCodes } from 'http-status-codes';
 
-const createStudent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const createStudent: RequestHandler = async (req, res, next) => {
   try {
     const { password, student: studentData } = req.body;
 
@@ -14,17 +12,13 @@ const createStudent = async (
       studentData,
     );
 
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
       message: 'Student created successfully',
       success: true,
       data: result,
     });
   } catch (error) {
-    // res.status(500).json({
-    //   message: 'Failed to create student',
-    //   success: false,
-    //   error: error,
-    // });
     next(error);
   }
 };
