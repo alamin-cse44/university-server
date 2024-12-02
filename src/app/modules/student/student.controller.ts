@@ -16,10 +16,7 @@ const getSingleStudent = async (
       data: result,
     });
   } catch (error) {
-    res.status(500).json({
-      message: 'Failed to retrieve student',
-      success: false,
-    });
+    next(error);
   }
 };
 
@@ -36,10 +33,7 @@ const getAllStudents = async (
       data: result,
     });
   } catch (error) {
-    res.status(500).json({
-      message: 'Failed to retrieve students',
-      success: false,
-    });
+    next(error);
   }
 };
 
@@ -56,10 +50,7 @@ const deleteStudent = async (
       success: true,
     });
   } catch (error) {
-    res.status(500).json({
-      message: 'Failed to delete student',
-      success: false,
-    });
+    next(error);
   }
 };
 
