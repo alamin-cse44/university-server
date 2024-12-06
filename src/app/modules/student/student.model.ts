@@ -143,6 +143,11 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: Boolean,
       default: false,
     },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'Academic department is required'],
+      ref: 'AcademicDepartment',
+    }
   },
   {
     toJSON: {

@@ -1,7 +1,12 @@
 import { Student } from './student.model';
 
 const getAllStudentsFromDB = async () => {
-  const result = await Student.find();
+  const result = await Student.find()
+    .populate('admissionSemester')
+    .populate({
+      path: 'academicDepartment',
+      populate: { path: 'academicFaculty' },
+    });
   return result;
 };
 
@@ -13,7 +18,9 @@ const getSingleStudentFromDB = async (id: string) => {
 
 const deleteStudentFromDB = async (studentId: string, updateData: object) => {
   // const result = await Student.updateOne({ studentId }, { isDeleted: true });
-  const result = await Student.findByIdAndUpdate(studentId, updateData, { new: true });
+  const result = await Student.findByIdAndUpdate(studentId, updateData, {
+    new: true,
+  });
   return result;
 };
 
