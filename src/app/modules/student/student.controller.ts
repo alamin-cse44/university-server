@@ -10,7 +10,7 @@ const getSingleStudent = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Student retrieved successfully',
+    message: 'Student is retrieved successfully',
     data: result,
   });
 });
@@ -21,23 +21,36 @@ const getAllStudents = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Students retrieved successfully',
+    message: 'Student are retrieved successfully',
     data: result,
   });
 });
 
 const deleteStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
-  const updateData = { isDeleted: true };
+  // const updateData = { isDeleted: true };
   const result = await StudentServices.deleteStudentFromDB(
     studentId,
-    updateData,
+    // updateData,
   );
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Student deleted successfully',
+    message: 'Student is deleted successfully',
+    data: result,
+  });
+});
+
+const updateStudent = catchAsync(async (req, res) => {
+  const { studentId } = req.params;
+  const { student } = req.body;
+  const result = await StudentServices.updateStudentIntoDB(studentId, student);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Student is updated successfully',
     data: result,
   });
 });
@@ -46,4 +59,5 @@ export const StudentControllers = {
   getSingleStudent,
   getAllStudents,
   deleteStudent,
+  updateStudent,
 };
