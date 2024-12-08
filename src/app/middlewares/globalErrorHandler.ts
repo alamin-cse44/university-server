@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { ZodError, ZodIssue } from 'zod';
-import { TErrorSource } from '../interface/error';
+import { TErrorSources } from '../interface/error';
 import config from '../config';
+import handleZodError from '../errors/handleZodError';
+import handleValidationError from '../errors/handleValidationError';
 
 const globalErrorHandler = (
   error: any,
@@ -12,31 +14,20 @@ const globalErrorHandler = (
   let statusCode = error.statusCode || 500;
   let message = error.message || 'Something went wrong!';
 
-  let errorSources: TErrorSource = [
+  let errorSources: TErrorSources = [
     {
       path: '',
       message: 'Something went wrong!',
     },
   ];
 
-  const handleZodError = (err: ZodError) => {
-    const statusCode = 400;
-    const errorSources: TErrorSource = err.issues.map((issue: ZodIssue) => {
-      return {
-        path: issue?.path[issue.path.length - 1],
-        message: issue.message,
-      };
-    });
-
-    return {
-      statusCode,
-      message: 'Validation error',
-      errorSources,
-    };
-  };
-
   if (error instanceof ZodError) {
     const simplifiedError = handleZodError(error);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorSources = simplifiedError.errorSources;
+  } else if (error.name === 'ValidationError') {
+    const simplifiedError = handleValidationError(error);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorSources = simplifiedError.errorSources;
@@ -46,6 +37,7 @@ const globalErrorHandler = (
     success: false,
     message,
     errorSources,
+    error,
     stack: config.NODE_ENV === 'development' ? error.stack : null,
   });
 };
