@@ -7,7 +7,6 @@ import { TStudent } from './student.interface';
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   const queryObj = { ...query };
-  console.log('base query: ', query);
 
   // searching
   const studentSearchableFields = ['email', 'name.firstname', 'presentAddress'];
@@ -22,8 +21,10 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   });
 
   // filtering
-  const excludeFields = ['searchTerm', 'sort', 'limit'];
+  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
   excludeFields.forEach((field) => delete queryObj[field]);
+
+  console.log('base query: ', { query }, '\nexclude fields :', { queryObj });
 
   // console.log({ query, queryObj });
 
@@ -43,15 +44,34 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 
   const sortQuery = filterQuery.sort(sort);
 
-  // limiting 
+  // limiting and pagination
   let limit = 1;
-  if(query?.limit) {
-    limit = query.limit as number;
+  let page = 1;
+  let skip = 0;
+
+  if (query?.limit) {
+    limit = Number(query.limit);
   }
 
-  const limitQuery = await sortQuery.limit(limit);
+  if (query?.page) {
+    page = Number(query.page);
+    skip = (page - 1) * limit;
+  }
 
-  return limitQuery;
+  const paginateQuery = sortQuery.skip(skip);
+
+  const limitQuery = paginateQuery.limit(limit);
+
+  let fields = '__v';
+  // fields: 'name,email'
+  // fields: 'name email'
+  if (query?.fields) {
+    fields = (query.fields as string).split(',').join(' ');
+  }
+
+  const fieldQuery = await limitQuery.select(fields);
+
+  return { page, fieldQuery };
 };
 
 const getSingleStudentFromDB = async (id: string) => {
