@@ -41,7 +41,7 @@ const courseSchema = new Schema<TCourse>({
     type: Number,
     required: [true, 'Course Credits is required'],
   },
-  preRequisites: [PreRequisiteCoursesSchema],
+  preRequisiteCourses: [PreRequisiteCoursesSchema],
   isDeleted: {
     type: Boolean,
     default: false,
