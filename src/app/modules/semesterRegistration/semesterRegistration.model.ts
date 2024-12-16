@@ -4,7 +4,7 @@ import { SemesterRegistrationStatus } from './semesterRegistration.constant';
 
 const semesterRegistrationSchema = new Schema<TSemesterRegistration>(
   {
-    acamemicSemester: {
+    academicSemester: {
       type: Schema.Types.ObjectId,
       ref: 'AcademicSemester',
       required: true,
